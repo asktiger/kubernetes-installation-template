@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # upgrade pip
 yum install -y epel-release
 yum install -y python-pip python36 python-netaddr python36-pip python-devel git wget zip \
@@ -8,26 +10,28 @@ yum install -y python-pip python36 python-netaddr python36-pip python-devel git 
 yum update -y
 pip install --upgrade pip
 
+BEG_PATH="$(pwd)"
 
 rm -rf /srv/kubespray
 cd /srv
 git clone https://github.com/kubernetes-incubator/kubespray.git
 cd /srv/kubespray
-git checkout -b v2.10.0
+# updated at 2019-08-05
+git checkout 4132cee6870cc09e5dff670b536979314f433dd4
 cd -
 
 # workaround for calico installation
 #sed -i 's/ansible>=2.5.0/ansible==2.6.3/' kubespray/requirements.txt
-#cd -
+# cd -
 pip install -r /srv/kubespray/requirements.txt
 
 
 BASE_DIR="/srv/kubespray"
 rm -rf ${BASE_DIR}/inventory/mycluster
 mkdir -p ${BASE_DIR}/inventory/mycluster
-cp -r kubespray/* ${BASE_DIR}/inventory/mycluster/
+cp -r ${BEG_PATH}/kubespray/* ${BASE_DIR}/inventory/mycluster/
 
-cp ${BEG_PATH}/node-preconfig.yml ${BASE_DIR}/node-preconfig.yml
+cp ${BEG_PATH}/node-preconfig*.yml ${BASE_DIR}/
 cp ${BEG_PATH}/node-postconfig.yml ${BASE_DIR}/node-postconfig.yml
 
 cd ${BASE_DIR}
