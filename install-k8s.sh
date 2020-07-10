@@ -3,12 +3,9 @@
 set -e
 
 # upgrade pip
-yum install -y epel-release
-yum install -y python-pip python36 python-netaddr python36-pip python-devel git wget zip \
-               lrzsz net-tools cracklib-dicts-2.9.0-11.el7 libselinux-python device-mapper-libs \
-               python-httplib2 openssl rsync bash-completion socat unzip sshpass
-yum update -y
-pip install --upgrade pip
+yum -y update
+yum -y install git python3-pip python sshpass
+pip3 install --upgrade pip
 
 BEG_PATH="$(pwd)"
 
